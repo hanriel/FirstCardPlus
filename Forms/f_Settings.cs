@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace FirstCardPlus
+namespace FirstCardPlus.Forms
 {
-    public partial class Form1 : Form
+    public partial class f_Settings : Form
     {
-        public Form1()
+        public f_Settings()
         {
             InitializeComponent();
         }
