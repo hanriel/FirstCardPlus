@@ -32,7 +32,7 @@ namespace FirstCardPlus.Forms
             SendLogin();
             GetPrivateSession();
 
-            AutoUpdater.Start("http://new.sch24perm.ru/soft/fcp/updates/Versions.xml");
+            AutoUpdater.Start("https://new.sch24perm.ru/soft/fcp/updates/Versions.xml");
         }
 
         private void b_exit_Click(object sender, EventArgs e) => Application.Exit();
@@ -52,7 +52,7 @@ namespace FirstCardPlus.Forms
         private void GetToken()
         {
             _token = Regex.Match(
-                HttpWorker.Get("http://new-pk.first-card.ru/", _cookieContainer),
+                HttpWorker.Get("https://new-pk.first-card.ru/", _cookieContainer),
                 "ue = \"(.*)\"", RegexOptions.IgnorePatternWhitespace
             ).Groups[1].Value;
         }
@@ -60,14 +60,14 @@ namespace FirstCardPlus.Forms
         void SendLogin()
         {
             var postData = "_token=" + _token + "&contract_user=0020001155&pass_user=24schoolnutr";
-            var response = HttpWorker.Post("http://new-pk.first-card.ru/proc/login", _cookieContainer, postData);
+            var response = HttpWorker.Post("https://new-pk.first-card.ru/proc/login", _cookieContainer, postData);
             if (response[0] == 'Ч')
             {
                 MessageBox.Show(response, "Отправка авторизации", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void GetPrivateSession() => HttpWorker.Get("http://new-pk.first-card.ru/pc", _cookieContainer);
+        private void GetPrivateSession() => HttpWorker.Get("https://new-pk.first-card.ru/pc", _cookieContainer);
 
         void GetWorkList()
         {
@@ -81,9 +81,9 @@ namespace FirstCardPlus.Forms
 
             _dateStartArray = _dateStart.ToShortString().Split('.');
 
-            string postData = $"_token={_token}&class_name=&month=0{_dateStart.Month}&year={_dateStart.Year}";
+            string postData = $"_token={_token}&class_name=&month={_dateStart.Month}&year={_dateStart.Year}";
             string rawJson =
-                HttpWorker.Post("http://new-pk.first-card.ru/reports/work-days", _cookieContainer, postData);
+                HttpWorker.Post("https://new-pk.first-card.ru/reports/work-days", _cookieContainer, postData);
 
 
             dynamic json = null;
@@ -135,8 +135,8 @@ namespace FirstCardPlus.Forms
         void GetFullList(string klass, Date date)
         {
             var postData = "_token=" + _token + "&class_name=" + klass +
-                           $"&month=0{_dateStart.Month}&year={_dateStart.Year}";
-            var rawJson = HttpWorker.Post("http://new-pk.first-card.ru/reports/for-ae", _cookieContainer,
+                           $"&month={_dateStart.Month}&year={_dateStart.Year}";
+            var rawJson = HttpWorker.Post("https://new-pk.first-card.ru/reports/for-ae", _cookieContainer,
                 Encoding.UTF8.GetBytes(postData));
 
             dynamic json = JsonConvert.DeserializeObject<dynamic>(rawJson)["return_data"]["data"]["report"];
